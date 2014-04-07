@@ -12,6 +12,7 @@
     "coffee-script": "1.4.x",
     "jade": "~0.35.0",
     "less-middleware": "~0.1.11",
+    "connect-coffee-script": "~0.1.6",
     "bower": "~1.2.7"
   }
 }
