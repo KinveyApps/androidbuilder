@@ -14,6 +14,7 @@
     "q": "0.9.6",
     "less-middleware": "~0.1.11",
     "connect-coffee-script": "~0.1.6",
-    "bower": "~1.2.7"
+    "bower": "~1.2.7",
+    "jinjs": "^0.3.6"
   }
 }

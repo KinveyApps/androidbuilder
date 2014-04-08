@@ -2,6 +2,7 @@ express = require 'express';
 less = require 'less-middleware'
 coffeescript = require('connect-coffee-script')
 app = express();
+templates = require './render'
 
 app.configure ->
 	app.use(less({ src: __dirname + '/../client/' }));
@@ -10,7 +11,8 @@ app.configure ->
 	app.use express.static __dirname + '/../client/'
 
 app.post '/app', (req, res, next)->
-	res.download('./glittercorn.jpg')
+	# res.download('./glittercorn.jpg')
+	res.send(templates.render())
 
 app.get '/', (req, res, next)->
 	res.render('../client/templates/layout.jade')
