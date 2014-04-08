@@ -1,2 +1,0 @@
-app.key=kid_TP-cchWA6i
-app.secret=d60ec2fb4239496ea1d4cc1ffe85cd8f
