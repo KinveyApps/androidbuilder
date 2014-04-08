@@ -1,8 +1,12 @@
 (function() {
   window.BuildCtrl = function($scope, $http) {
-    $scope.ok = true;
+    var _this = this;
+    console.log("huh");
     return $scope.buildIt = function() {
-      return console.log("Ok");
+      console.log("ok");
+      return $http.post('/app', {}).then(function(response) {
+        return console.log(response.body);
+      });
     };
   };
 

@@ -1,6 +1,9 @@
 window.BuildCtrl = ($scope, $http) ->
-  $scope.ok = true
 
-  $scope.buildIt = () ->
-  	console.log "Ok"
+	console.log "huh"
+
+	$scope.buildIt = () =>
+		console.log "ok"
+		$http.post('/app', {}).then (response) ->
+			console.log response.body
 
