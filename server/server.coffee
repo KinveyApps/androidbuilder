@@ -8,9 +8,12 @@ app.configure ->
 	app.use('/components', express.static(__dirname + '/../bower_components/'))
 	app.use coffeescript(src: __dirname + '/../client/')
 	app.use express.static __dirname + '/../client/'
-	 
-app.get '/', (req, res)->
-  res.render('../client/templates/layout.jade')
+
+app.post '/app', (req, res, next)->
+	res.download('./glittercorn.jpg')
+
+app.get '/', (req, res, next)->
+	res.render('../client/templates/layout.jade')
 
 server = app.listen 3000, ->
-  console.log('Listening on port %d', server.address().port)
+	console.log('Listening on port %d', server.address().port)
