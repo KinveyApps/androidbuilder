@@ -6,7 +6,6 @@ code_generator = require './gen'
 
 context1 = {app_kid: "kid1234", app_secret: "myappsecret", app_name:"MyApp", collection_name: "MyCollection", entity_class_name: "MyEntityName", entity_fields: [{name: "a", type: "String"}]}
 
-
 returnError = (err, context, res) ->
 	console.log context + ': ' + err
 	if err?.isError?
