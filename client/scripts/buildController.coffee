@@ -1,4 +1,4 @@
-window.BuildCtrl = ($scope, $http) ->
+window.BuildCtrl = ($scope, $http, $location, $anchorScroll) ->
 
 # context1 = {app_kid: "kid1234", app_secret: "myappsecret", app_name:"MyApp", collection_name: "MyCollection", entity_class_name: "MyEntityName", 
 
@@ -12,17 +12,26 @@ window.BuildCtrl = ($scope, $http) ->
 	# $scope.appSecret = ""
 	# $scope.collectionName = ""
 	# $scope.entityClassName = ""
-	$scope.fieldList = []
+	$scope.fieldList = [{
+		name: ""
+		type: ""
+	}]
+
 
 	$scope.addField = () ->
 		$scope.fieldList.push
-			name: $scope.currentField
-			type: $scope.currentType
-		$scope.currentType = ""
-		$scope.currentField = ""	
-		console.log $scope.fieldList
+			name: ""
+			type: ""
+		# $scope.currentType = ""
+		# $scope.currentField = ""
+		# console.log $scope.fieldList
 		#reset $scope fields
 
+	$scope.jumpDown = (target) ->
+		console.log "jumping"
+		$location.hash(target)
+		$anchorScroll
+		# $window.scrollTo 0, $window.height + $document.body.scrollTop
 
 	$scope.buildIt = () =>
 		console.log "building model"

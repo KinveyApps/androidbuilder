@@ -5994,11 +5994,15 @@ h1 {
 .v-secondary {
   margin-top: 10%;
 }
+.topSpacing {
+  margin-top: 4px;
+}
 .center-namefield {
   text-align: center;
-  margin: 0 auto;
+  margin-right: 0 auto;
+  margin-left: 0 auto;
 }
-.btn {
+.nextButton {
   padding: 14px;
   background-color: #8B641E;
 }
