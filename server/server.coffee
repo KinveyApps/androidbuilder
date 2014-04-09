@@ -19,6 +19,7 @@ returnError = (err, context, res) ->
 		res.send(500, err)
 
 app.configure ->
+	app.use express.bodyParser()
 	app.use(less({ src: __dirname + '/../client/' }));
 	app.use coffeescript(src: __dirname + '/../client/')
 	app.use('/components', express.static(__dirname + '/../bower_components/'))
@@ -30,9 +31,9 @@ app.configure ->
 			return returnError err, 'use', res 
 
 app.post '/app', (req, res, next) -> 
-	console.log 'Post handling.'
+	console.log 'Post handling. -> ' + req.body
 	code_generator.cleanupSync()
-	code_generator.gen context1, platform1,  (err) -> 
+	code_generator.gen req.body, platform1, (err) -> 
 		console.log('Gen Response')
 		if err
 			console.log 'Code_generator.gen error', err
@@ -46,16 +47,24 @@ app.post '/app', (req, res, next) ->
 			console.log 'archive completed, return 200'
 			console.log filename
 
-			return res.download(filename)
-	
-app.get '*', (req, res, next) ->
-	res.render('../client/templates/androidlayout.jade')
+			res.send {"download": filename}
+
+			# return res.download filename, 'karp.zip', (err) ->
+			# 	console.log err
+
 
 app.get '/android', (req, res, next) ->
 	res.render('../client/templates/androidlayout.jade')
 
 app.get '/ios', (req, res, next) ->
 	res.render('../client/templates/ioslayout.jade')
+
+app.get '/file/:id', (req, res, next) ->
+	res.download(process.env.PWD + '/' +req.params.id)
+
+app.get '*', (req, res, next) ->
+	res.render('../client/templates/androidlayout.jade')
+
 
 server = app.listen 3000, ->
 	console.log('Listening on port %d', server.address().port)

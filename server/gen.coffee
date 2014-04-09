@@ -40,7 +40,7 @@ gen_dir = 'gendir'
 archive = archiver 'zip'
 
 gen = (context, platform, callback) ->
-	console.log 'started gen'
+	console.log 'started gen -> ' + context
 	
 	src_dir = nodePath.join pwd, '/server/content_root/' + platform
 	dest_dir = nodePath.join pwd, gen_dir
@@ -86,7 +86,7 @@ zip = (platform, callback) ->
 	output.on "close", ->
 		console.log archive.pointer() + " total bytes"
 		console.log "archiver has been finalized and the output file descriptor has closed."
-		callback null, nodePath.join pwd, target_filename
+		callback null, nodePath.join target_filename
 
 	archive.on "error", (err) ->
 		console.log 'in zip ' + err

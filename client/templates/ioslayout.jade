@@ -27,7 +27,7 @@ html(lang="en", ng-app="Application")
       .row
         .col-lg-12.text-center
           .div.input-group.input-group-lg.center-namefield
-            input.form-control(type="text" placeholder="Name your app")
+            input.form-control(type="text" placeholder="Name your app", ng-model="appName")
       .row
         .col-lg-6.col-lg-offset-3.v-secondary
           .btn.btn-primary.pull-right Next
@@ -36,9 +36,9 @@ html(lang="en", ng-app="Application")
         .col-lg-4.col-lg-offset-4.text-center.v-center
           p.lead use the Kinvey cloud!
           .div.center-namefield
-            input.form-control(type="text" placeholder="App Key")
+            input.form-control(type="text" placeholder="App Key", ng-model="appKey")
           .div.center-namefield
-            input.form-control(type="text" placeholder="App Secret")
+            input.form-control(type="text" placeholder="App Secret", ng-model="appSecret")
           a.v-secondary.lead(href="http://console.kinvey.com") (or sign up at Kinvey here for your credentials)
       .row
         .col-lg-6.col-lg-offset-3.v-secondary
@@ -47,14 +47,14 @@ html(lang="en", ng-app="Application")
       .row
         .col-lg-4.col-lg-offset-4.text-center.v-center
           .div.center-namefield
-            input.form-control(type="text" placeholder="Collection Name ")
+            input.form-control(type="text" placeholder="Collection Name", ng-model="collectionName")
           .div.center-namefield
-            input.form-control(type="text" placeholder="Type")
+            input.form-control(type="text" placeholder="Type", ng-model="currentType")
           .div.center-namefield
-            input.form-control(type="text" placeholder="Field name")
+            input.form-control(type="text" placeholder="Field name", ng-model="currentField")
       .row
         .col-lg-6.col-lg-offset-3.v-secondary
-          .btn.btn-primary.pull-right One more
+          .btn.btn-primary.pull-right(ng-click="addField()") One more
     .container-full.slabLight
       .row
         .col-lg-12.text-center.v-center
