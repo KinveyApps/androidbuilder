@@ -13,6 +13,21 @@ java_templates = [{template: java_model_tpl, basename: java_model_tpl_bn, ename:
 	{template: java_strings_tpl, basename: java_strings_tpl_bn, ename: java_strings_tpl_en},
 	{template: java_kinvey_props_tpl, basename: java_kinvey_props_tpl_bn, ename: java_kinvey_props_tpl_en}]
 
+
+ios_appdelegate_tpl_en = '/AppDelegate_m'
+ios_appdelegate_tpl_bn = '/TestDrive-iOS-master/KinveyQuickstart'
+ios_appdelegate_tpl = require './content_root/ios' + ios_appdelegate_tpl_bn + ios_appdelegate_tpl_en
+ios_modelh_tpl_en = '/TestObject_h'
+ios_modelh_tpl_bn = '/TestDrive-iOS-master/KinveyQuickstart'
+ios_modelh_tpl = require './content_root/ios' + ios_modelh_tpl_bn + ios_modelh_tpl_en
+ios_modelm_tpl_en = '/TestObject_m'
+ios_modelm_tpl_bn = '/TestDrive-iOS-master/KinveyQuickstart'
+ios_modelm_tpl = require './content_root/ios' + ios_modelm_tpl_bn + ios_modelm_tpl_en
+ios_templates = [{template: ios_appdelegate_tpl, basename: ios_appdelegate_tpl_bn, ename: ios_appdelegate_tpl_en}, 
+	{template: ios_modelh_tpl, basename: ios_modelh_tpl_bn, ename: ios_modelh_tpl_en},
+	{template: ios_modelm_tpl, basename: ios_modelm_tpl_bn, ename: ios_modelm_tpl_en}]
+
+
 fs = require 'fs'
 nodePath = require 'path'
 wrench = require 'wrench'
@@ -24,10 +39,10 @@ target_dir = pwd
 gen_dir = 'gendir'
 archive = archiver 'zip'
 
-gen = (context, callback) ->
+gen = (context, platform, callback) ->
 	console.log 'started gen'
 	
-	src_dir = nodePath.join pwd, '/server/content_root/android'
+	src_dir = nodePath.join pwd, '/server/content_root/' + platform
 	dest_dir = nodePath.join pwd, gen_dir
 	wrench.copyDirRecursive src_dir, dest_dir, (err) ->
 		if err
@@ -36,17 +51,22 @@ gen = (context, callback) ->
 
 		errored = false
 
-		for tpl in java_templates
+		if platform == 'android'
+			platform_specific_templates = java_templates
+		else 
+			platform_specific_templates = ios_templates
+
+		for tpl in platform_specific_templates
 			do (tpl) ->
 				wrench.mkdirSyncRecursive nodePath.join pwd + gen_dir + tpl.basename
-				console.log 'Made path: ', nodePath.join pwd + gen_dir + tpl.basename
 				result = tpl.template.render(context);
-				console.log tpl.basename
-				if tpl.basename == java_model_tpl_bn
-					console.log nodePath.join gen_dir + tpl.basename + "/" + context.entity_class_name + ".java"
+				if tpl.ename == java_model_tpl_en
 					path = nodePath.join gen_dir + tpl.basename + "/" + context.entity_class_name + ".java"
+				else if tpl.ename == ios_modelm_tpl_en
+					path = nodePath.join gen_dir + tpl.basename + "/" + context.entity_class_name + ".m"
+				else if tpl.ename == ios_modelh_tpl_en
+					path = nodePath.join gen_dir + tpl.basename + "/" + context.entity_class_name + ".h"
 				else
-					console.log gen_dir + tpl.basename + tpl.ename.replace("_",".")
 					path = gen_dir + tpl.basename + tpl.ename.replace("_",".")
 				fs.writeFile path, result, (err) ->
 					if err
@@ -59,8 +79,8 @@ gen = (context, callback) ->
 			console.log typeof callback
 			callback()
 
-zip = (callback) ->
-	target_filename = 'android-' + guid() + '.zip'
+zip = (platform, callback) ->
+	target_filename = platform + '-' + guid() + '.zip'
 	output = fs.createWriteStream target_filename
 
 	output.on "close", ->
@@ -75,9 +95,9 @@ zip = (callback) ->
 	archive.pipe output
 	archive.bulk [
 		expand: true
-		cwd: nodePath.join gen_dir, 'hihimanu'
+		cwd: nodePath.join gen_dir
 		src: ['**']
-		dest: 'hihimanu'
+		dest: platform
 		filter: tplExtFilter
 	]
 	archive.finalize()

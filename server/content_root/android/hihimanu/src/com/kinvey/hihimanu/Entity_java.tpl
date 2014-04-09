@@ -9,4 +9,8 @@ public class {{entity_class_name}} extends GenericJson {
 	@Key public {{ entity_field.type }} {{ entity_field.name }};
 	{% endfor %}
 
+	{% for entity_field in entity_fields %}
+	public get{{ entity_field.name }}() { return this.{{entity_field.name}}; }
+	{% endfor %}
+
 }
