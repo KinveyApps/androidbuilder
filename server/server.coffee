@@ -1,12 +1,15 @@
 express = require 'express';
 less = require 'less-middleware'
 coffeescript = require('connect-coffee-script')
-app = express();
+app = express()
 code_generator = require './gen'
+
+context1 = {app_kid: "kid1234", app_secret: "myappsecret", app_name:"MyApp", collection_name: "MyCollection", entity_class_name: "MyEntityName", entity_fields: [{name: "a", type: "String"}]}
+
 
 returnError = (err, context, res) ->
 	console.log context + ': ' + err
-	if err.isError?
+	if err?.isError?
 		res.send(err.statusCode,{
 			type: err.type
 			description: err.description
@@ -23,22 +26,30 @@ app.configure ->
 	app.use app.router
 
 	app.use (err, req, res, next)->
-		returnError err, 'use', res if err
-
+		if err
+			return returnError err, 'use', res 
 
 app.post '/app', (req, res, next) -> 
-	# code_generator.cleanup ->		
-	code_generator.gen (err) -> 
-		returnError err, 'gen', res if err
+	console.log 'Post handling.'
+	code_generator.cleanupSync()
+	code_generator.gen context1, (err) -> 
+		console.log('Gen Response')
+		if err
+			console.log 'Code_generator.gen error', err
+			return returnError err, 'gen', res
 
 		code_generator.zip (err, filename) -> 
-			returnError err, 'zip', res if err
+			if err
+				console.log 'Code_generator.zip error', err
+				return returnError err, 'zip', res
 
 			console.log 'archive completed, return 200'
+			console.log filename
+
 			return res.download(filename)
 	
 app.get '*', (req, res, next) ->
 	res.render('../client/templates/layout.jade')
 
 server = app.listen 3000, ->
- 	console.log('Listening on port %d', server.address().port)
+	console.log('Listening on port %d', server.address().port)

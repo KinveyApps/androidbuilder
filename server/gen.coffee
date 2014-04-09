@@ -14,71 +14,100 @@ java_templates = [{template: java_model_tpl, basename: java_model_tpl_bn, ename:
 	{template: java_kinvey_props_tpl, basename: java_kinvey_props_tpl_bn, ename: java_kinvey_props_tpl_en}]
 
 fs = require 'fs'
-# fse = require 'fs-extra'
+nodePath = require 'path'
 wrench = require 'wrench'
 pwd = process.env.PWD
 
 archiver = require 'archiver'
-target_filename = 'target.zip'
+
 target_dir = pwd 
-gen_dir = pwd + '/gendir'
-output = fs.createWriteStream target_filename
+gen_dir = 'gendir'
 archive = archiver 'zip'
 
-gen = (callback) ->
+gen = (context, callback) ->
 	console.log 'started gen'
+	
+	src_dir = nodePath.join pwd, '/server/content_root/android'
+	dest_dir = nodePath.join pwd, gen_dir
+	wrench.copyDirRecursive src_dir, dest_dir, (err) ->
+		if err
+			console.log 'wrench.copyDirRecursive', err
+			return callback err	
 
-	context = {app_kid: "kid1234", app_secret: "myappsecret", app_name:"MyApp", collection_name: "MyCollection", entity_class_name: "MyEntityName"}
-	wrench.copyDirRecursive pwd + '/server/content_root/android', gen_dir, {filter:'*.tpl'}, (err) ->
-	  callback err	if err
+		errored = false
 
 		for tpl in java_templates
-			do (tpl) ->		
-				wrench.mkdirSyncRecursive gen_dir + tpl.basename
+			do (tpl) ->
+				wrench.mkdirSyncRecursive nodePath.join pwd + gen_dir + tpl.basename
+				console.log 'Made path: ', nodePath.join pwd + gen_dir + tpl.basename
 				result = tpl.template.render(context);
-				path = gen_dir + tpl.basename + tpl.ename.replace("_",".")
+				console.log tpl.basename
+				if tpl.basename == java_model_tpl_bn
+					console.log nodePath.join gen_dir + tpl.basename + "/" + context.entity_class_name + ".java"
+					path = nodePath.join gen_dir + tpl.basename + "/" + context.entity_class_name + ".java"
+				else
+					console.log gen_dir + tpl.basename + tpl.ename.replace("_",".")
+					path = gen_dir + tpl.basename + tpl.ename.replace("_",".")
 				fs.writeFile path, result, (err) ->
-					callback err if err
+					if err
+						errored = true
+						console.log 'completed gen with failure on path: ', path
+						return callback err
 
-		console.log 'completed gen'
-		callback
+		if !errored
+			console.log 'completed gen'
+			console.log typeof callback
+			callback()
 
 zip = (callback) ->
+	target_filename = 'android-' + guid() + '.zip'
+	output = fs.createWriteStream target_filename
+
 	output.on "close", ->
-	  console.log archive.pointer() + " total bytes"
-	  console.log "archiver has been finalized and the output file descriptor has closed."
-  	callback null, target_filename
+		console.log archive.pointer() + " total bytes"
+		console.log "archiver has been finalized and the output file descriptor has closed."
+		callback null, nodePath.join pwd, target_filename
 
 	archive.on "error", (err) ->
-	  callback err
+		console.log 'in zip ' + err
+		callback err
 
 	archive.pipe output
 	archive.bulk [
-	  expand: true
-	  cwd: gen_dir
-	  src: ["**"]
-	  dest: target_dir
+		expand: true
+		cwd: nodePath.join gen_dir, 'hihimanu'
+		src: ['**']
+		dest: 'hihimanu'
+		filter: tplExtFilter
 	]
 	archive.finalize()
 
-# cleanup = (callback) ->
-# 	if fs.existsSync(target_dir + target_filename)
-# 		fs.unlinkSync pwd + target_dir + target_filename 
-# 	deleteFolderRecursive pwd + gen_dir
-# 	callback
+tplExtFilter = (path) ->
+	if path.indexOf('.tpl') > 0
+		return false	
+	return true
 
-# deleteFolderRecursive = (path) ->
-#   files = []
-#   if fs.existsSync(path)
-#     files = fs.readdirSync(path)
-#     files.forEach (file, index) ->
-#       curPath = path + "/" + file
-#       if fs.lstatSync(curPath).isDirectory() # recurse
-#         deleteFolderRecursive curPath
-#       else # delete file
-#         fs.unlinkSync curPath
-#     fs.rmdirSync path
+guid = ->
+	now = new Date()
+	return Math.floor(Math.random() * 10) + parseInt(now.getTime()).toString(36).toUpperCase()
+
+cleanupSync = ->
+	path = nodePath.join pwd, gen_dir
+	return deleteFolderRecursiveSync (path)
+
+deleteFolderRecursiveSync = (path) ->
+	if fs.existsSync(path)
+		fs.readdirSync(path).forEach (file, index) ->
+			curPath = path + "/" + file
+			if fs.lstatSync(curPath).isDirectory() # recurse
+				deleteFolderRecursiveSync curPath
+			else # delete file
+				fs.unlinkSync curPath
+
+		fs.rmdirSync path
+	return
 
 exports.gen = gen
 exports.zip = zip
-# exports.cleanup = cleanup
+exports.cleanupSync = cleanupSync
+
