@@ -48,7 +48,13 @@ app.post '/app', (req, res, next) ->
 			return res.download(filename)
 	
 app.get '*', (req, res, next) ->
-	res.render('../client/templates/layout.jade')
+	res.render('../client/templates/androidlayout.jade')
+
+app.get '/android', (req, res, next) ->
+	res.render('../client/templates/androidlayout.jade')
+
+app.get '/ios', (req, res, next) ->
+	res.render('../client/templates/ioslayout.jade')
 
 server = app.listen 3000, ->
 	console.log('Listening on port %d', server.address().port)
