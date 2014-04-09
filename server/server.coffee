@@ -2,7 +2,18 @@ express = require 'express';
 less = require 'less-middleware'
 coffeescript = require('connect-coffee-script')
 app = express();
-templates = require './gen'
+code_generator = require './gen'
+
+returnError = (err, context, res) ->
+	console.log context + ': ' + err
+	if err.isError?
+		res.send(err.statusCode,{
+			type: err.type
+			description: err.description
+			stack: err.stack
+		})
+	else
+		res.send(500, err)
 
 app.configure ->
 	app.use(less({ src: __dirname + '/../client/' }));
@@ -12,20 +23,20 @@ app.configure ->
 	app.use app.router
 
 	app.use (err, req, res, next)->
-		if err.isError?
-			res.send(err.statusCode,{
-				type: err.type
-				description: err.description
-				stack: err.stack
-			})
-		else
-			res.send(500,err)
-	
+		returnError err, 'use', res if err
+
+
 app.post '/app', (req, res, next) -> 
-	# res.download('./glittercorn.jpg')
+	# code_generator.cleanup ->		
+	code_generator.gen (err) -> 
+		returnError err, 'gen', res if err
 
-	res.send(templates.render())
+		code_generator.zip (err, filename) -> 
+			returnError err, 'zip', res if err
 
+			console.log 'archive completed, return 200'
+			return res.download(filename)
+	
 app.get '*', (req, res, next) ->
 	res.render('../client/templates/layout.jade')
 
