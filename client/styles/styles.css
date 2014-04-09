@@ -5954,13 +5954,56 @@ td.visible-print {
     display: none !important;
   }
 }
-#jumbotron-header {
-  background-color: #CBD7DC;
-  padding: 30px;
-  margin-bottom: 30px;
-  font-size: 21px;
-  font-weight: 200;
-  line-height: 2.14285714;
-  color: inherit;
-  background-color: #eeeeee;
+html,
+body {
+  height: 100%;
+}
+h1 {
+  font-family: Arial, sans-serif;
+  font-size: 80px;
+  color: #F8F8FF;
+}
+.lead {
+  color: #F8F8FF;
+}
+.container-full {
+  margin: 0 auto;
+  width: 100%;
+  min-height: 100%;
+  color: #eee;
+  overflow: hidden;
+}
+.slabLight {
+  background-color: #41516A;
+}
+.slabDark {
+  background-color: #44618E;
+}
+.slabMiddle {
+  background-color: #7997C6;
+}
+.fieldbox {
+  padding-right: -15px;
+  padding-left: -15px;
+  position: relative;
+  width: 50%;
+}
+.v-center {
+  margin-top: 20%;
+}
+.v-secondary {
+  margin-top: 10%;
+}
+.center-namefield {
+  text-align: center;
+  margin: 0 auto;
+}
+.btn {
+  padding: 14px;
+  background-color: #8B641E;
+}
+a,
+a:hover {
+  text-decoration: underline;
+  color: #F8F8FF;
 }
