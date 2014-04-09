@@ -1,7 +1,7 @@
 doctype 5
 html(lang="en", ng-app="Application")
   head
-    title android builder
+    title iOS builder
     link(rel="stylesheet", href="/styles/styles.css")
     link(rel="stylesheet", href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css", type="text/css")  
     script(src="/components/jquery/dist/jquery.js")
@@ -12,53 +12,64 @@ html(lang="en", ng-app="Application")
     script(src="/../scripts/buildController.js")
     block scripts
   body(ng-controller="BuildCtrl")
-    .container-full.slabLight
+    #first.container-full.slabLight
       .row
         .col-lg-12.text-center.v-center
           p.h1 BOKA
-          p.lead Boilerplate Of Kinvey Applications
+          p.lead
+            span.boldTitle BO
+            span ilerplate-free  
+            span.boldTitle K
+            span invey  
+            span.boldTitle A
+            span pplications
       .row
         .col-lg-6.col-lg-offset-3.v-secondary
-          .btn.btn-primary.pull-right Try it
-    .container-full.slabMiddle
+          .btn.btn-primary.pull-right.nextButton(ng-click="jumpDown('second')") Try it
+    #second.container-full.slabDark
       .row
-        .col-lg-12.text-center.v-center
-          p.lead every app needs a name
-      .row
-        .col-lg-12.text-center
-          .div.input-group.input-group-lg.center-namefield
+        .col-lg-4.col-lg-offset-4.text-center.v-center
+          p.lead Every app needs a name
+          .div.center-namefield
             input.form-control(type="text" placeholder="Name your app", ng-model="appName")
       .row
         .col-lg-6.col-lg-offset-3.v-secondary
-          .btn.btn-primary.pull-right Next
-    .container-full.slabDark
+          .btn.btn-primary.pull-right.nextButton(ng-click="jumpDown('third')") Next
+    #third.container-full.slabLight
       .row
         .col-lg-4.col-lg-offset-4.text-center.v-center
-          p.lead use the Kinvey cloud!
+          p.lead Use the Kinvey cloud!
           .div.center-namefield
             input.form-control(type="text" placeholder="App Key", ng-model="appKey")
-          .div.center-namefield
+          .div.center-namefield.topSpacing
             input.form-control(type="text" placeholder="App Secret", ng-model="appSecret")
           a.v-secondary.lead(href="http://console.kinvey.com") (or sign up at Kinvey here for your credentials)
       .row
         .col-lg-6.col-lg-offset-3.v-secondary
-          .btn.btn-primary.pull-right Next
-    .container-full.slabMiddle
+          .btn.btn-primary.pull-right.nextButton(ng-click="jumpDown('fourth')") Next
+    #fourth.container-full.slabDark
       .row
         .col-lg-4.col-lg-offset-4.text-center.v-center
-          .div.center-namefield
+          p.lead What are you saving?
+          .center-namefield
             input.form-control(type="text" placeholder="Collection Name", ng-model="collectionName")
-          .div.center-namefield
-            input.form-control(type="text" placeholder="Type", ng-model="currentType")
-          .div.center-namefield
-            input.form-control(type="text" placeholder="Field name", ng-model="currentField")
+          .center-namefield.topSpacing
+            input.form-control(type="text" placeholder="Entity Name", ng-model="entityName")
+          .row(ng-repeat="field in fieldList")
+            .col-lg-6.text-center.topSpacing
+              input.form-control(type="text" placeholder="Type", ng-model="field.type")
+            .col-lg-6.text-center.topSpacing
+              div(ng-class="{'input-group': $last}")
+                input.form-control(type="text" placeholder="Field Name", ng-model="field.name")
+                span.input-group-btn(ng-show="$last")
+                  button.btn(ng-click="addField()") +               
       .row
         .col-lg-6.col-lg-offset-3.v-secondary
-          .btn.btn-primary.pull-right(ng-click="addField()") One more
-    .container-full.slabLight
+          .btn.btn-primary.pull-right.nextButton(ng-click="jumpDown('fifth')") All Set
+    #fifth.container-full.slabLight
       .row
         .col-lg-12.text-center.v-center
-          p.lead that's it!
+          p.lead That's it!
       .row
-        .col-lg-6.col-lg-offset-3.v-secondary
-          .btn.btn-primary.pull-right(ng-click="buildIt()") Zip
+        .col-lg-12.v-secondary.text-center
+          .btn.btn-primary.zipButton(ng-click="buildIt('ios')") Download your project

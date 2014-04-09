@@ -5958,13 +5958,13 @@ html,
 body {
   height: 100%;
 }
-h1 {
+p.h1 {
   font-family: Arial, sans-serif;
   font-size: 80px;
-  color: #F8F8FF;
+  color: #8d8d8d;
 }
 .lead {
-  color: #F8F8FF;
+  color: #8d8d8d;
 }
 .container-full {
   margin: 0 auto;
@@ -5974,13 +5974,10 @@ h1 {
   overflow: hidden;
 }
 .slabLight {
-  background-color: #41516A;
+  background-color: ##dddddd;
 }
 .slabDark {
-  background-color: #44618E;
-}
-.slabMiddle {
-  background-color: #7997C6;
+  background-color: #474747;
 }
 .fieldbox {
   padding-right: -15px;
@@ -5997,14 +5994,28 @@ h1 {
 .topSpacing {
   margin-top: 4px;
 }
+.boldTitle {
+  font-weight: bold;
+}
+.zipButton,
+.zipButton:hover {
+  padding-right: 40px;
+  padding-left: 40px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  background-color: #da5024;
+  border-color: #da5024;
+}
 .center-namefield {
   text-align: center;
   margin-right: 0 auto;
   margin-left: 0 auto;
 }
-.nextButton {
+.nextButton,
+.nextButton:hover {
   padding: 14px;
-  background-color: #8B641E;
+  background-color: #da5024;
+  border-color: #da5024;
 }
 a,
 a:hover {

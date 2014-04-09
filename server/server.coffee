@@ -33,13 +33,13 @@ app.configure ->
 app.post '/app', (req, res, next) -> 
 	console.log 'Post handling. -> ' + req.body
 	code_generator.cleanupSync()
-	code_generator.gen req.body, platform1, (err) -> 
+	code_generator.gen req.body, req.body.platform, (err) -> 
 		console.log('Gen Response')
 		if err
 			console.log 'Code_generator.gen error', err
 			return returnError err, 'gen', res
 
-		code_generator.zip platform1, (err, filename) -> 
+		code_generator.zip req.body.platform, (err, filename) -> 
 			if err
 				console.log 'Code_generator.zip error', err
 				return returnError err, 'zip', res

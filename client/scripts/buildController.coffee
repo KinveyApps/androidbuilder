@@ -33,7 +33,7 @@ window.BuildCtrl = ($scope, $http, $location, $anchorScroll) ->
 		$anchorScroll
 		# $window.scrollTo 0, $window.height + $document.body.scrollTop
 
-	$scope.buildIt = () =>
+	$scope.buildIt = (plat) =>
 		console.log "building model"
 		console.log $scope.fieldList
 		payload =
@@ -43,6 +43,7 @@ window.BuildCtrl = ($scope, $http, $location, $anchorScroll) ->
 			collection_name: $scope.collectionName
 			entity_class_name: $scope.entityName
 			entity_fields: $scope.fieldList
+			platform: plat
 		console.log payload
 
 		$http.post('/app', payload).then (response) ->

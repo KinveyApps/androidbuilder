@@ -16,11 +16,17 @@ html(lang="en", ng-app="Application")
       .row
         .col-lg-12.text-center.v-center
           p.h1 BOKA
-          p.lead BOilerplate-free Kinvey Applications
+          p.lead
+            span.boldTitle BO
+            span ilerplate-free  
+            span.boldTitle K
+            span invey  
+            span.boldTitle A
+            span pplications
       .row
         .col-lg-6.col-lg-offset-3.v-secondary
-          .btn.btn-primary.pull-right(ng-click="jumpDown('second')") Try it
-    #second.container-full.slabMiddle
+          .btn.btn-primary.pull-right.nextButton(ng-click="jumpDown('second')") Try it
+    #second.container-full.slabDark
       .row
         .col-lg-4.col-lg-offset-4.text-center.v-center
           p.lead Every app needs a name
@@ -28,8 +34,8 @@ html(lang="en", ng-app="Application")
             input.form-control(type="text" placeholder="Name your app", ng-model="appName")
       .row
         .col-lg-6.col-lg-offset-3.v-secondary
-          .btn.btn-primary.pull-right(ng-click="jumpDown('third')") Next
-    #third.container-full.slabDark
+          .btn.btn-primary.pull-right.nextButton(ng-click="jumpDown('third')") Next
+    #third.container-full.slabLight
       .row
         .col-lg-4.col-lg-offset-4.text-center.v-center
           p.lead Use the Kinvey cloud!
@@ -40,8 +46,8 @@ html(lang="en", ng-app="Application")
           a.v-secondary.lead(href="http://console.kinvey.com") (or sign up at Kinvey here for your credentials)
       .row
         .col-lg-6.col-lg-offset-3.v-secondary
-          .btn.btn-primary.pull-right(ng-click="jumpDown('fourth')") Next
-    #fourth.container-full.slabMiddle
+          .btn.btn-primary.pull-right.nextButton(ng-click="jumpDown('fourth')") Next
+    #fourth.container-full.slabDark
       .row
         .col-lg-4.col-lg-offset-4.text-center.v-center
           p.lead What are you saving?
@@ -57,27 +63,13 @@ html(lang="en", ng-app="Application")
                 input.form-control(type="text" placeholder="Field Name", ng-model="field.name")
                 span.input-group-btn(ng-show="$last")
                   button.btn(ng-click="addField()") +               
-          //- .row
-          //-   .col-lg-6.text-center.topSpacing
-          //-     button.btn(ng-click="addField()") + 
-            //-   input.form-control(type="text" placeholder="Type", ng-model="currentType")
-            //- .col-lg-6.text-center.topSpacing
-            //-   .input-group
-            //-     input.form-control(type="text" placeholder="Field Name", ng-model="currentField")
-            //-     span.input-group-btn
-                  
-
-          //- .div.center-namefield.topSpacing
-            
-          //- .div.center-namefield.topSpacing
-            input.form-control(type="text" placeholder="Field name", ng-model="currentField")
       .row
         .col-lg-6.col-lg-offset-3.v-secondary
-          .btn.btn-primary.pull-right(ng-click="jumpDown('fifth')") All Set
+          .btn.btn-primary.pull-right.nextButton(ng-click="jumpDown('fifth')") All Set
     #fifth.container-full.slabLight
       .row
         .col-lg-12.text-center.v-center
           p.lead That's it!
       .row
-        .col-lg-6.col-lg-offset-3.v-secondary
-          .btn.btn-primary(ng-click="buildIt()") Download a Zip
+        .col-lg-12.v-secondary.text-center
+          .btn.btn-primary.zipButton(ng-click="buildIt('android')") Download your project
